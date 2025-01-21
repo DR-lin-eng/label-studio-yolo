@@ -3,9 +3,6 @@ name: Docker Build and Push
 on:
   push:
     tags: ['v*']
-    branches: ['main']
-  pull_request:
-    branches: ['main']
   workflow_dispatch:
 
 jobs:
@@ -17,15 +14,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          lfs: true  # 如果你用 Git LFS 存储模型文件
-
-      - name: Download model file  # 这步可以从你的存储下载模型
-        run: |
-          mkdir -p models
-          # 这里可以是从你的存储下载模型的命令
-          # 例如：wget, curl, aws s3 cp 等
-          # 或者直接把模型文件放在仓库中
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -36,7 +24,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: line2188
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push
@@ -47,5 +35,5 @@ jobs:
           platforms: linux/${{ matrix.arch }}
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/label-studio-yolo:${{ matrix.arch }}-latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/label-studio-yolo:${{ matrix.arch }}-${{ github.ref_name }}
+            line2188/label-studio-yolo:${{ matrix.arch }}-latest
+            line2188/label-studio-yolo:${{ matrix.arch }}-${{ github.ref_name }}
