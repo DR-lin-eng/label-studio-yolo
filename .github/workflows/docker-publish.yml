@@ -35,5 +35,5 @@ jobs:
           platforms: linux/${{ matrix.arch }}
           push: true
           tags: |
-            your-dockerhub-username/label-studio-yolo:${{ matrix.arch }}-latest
-            your-dockerhub-username/label-studio-yolo:${{ matrix.arch }}-${{ github.ref_name }}
+            line2188/label-studio-yolo:${{ matrix.arch }}-latest
+            line2188/label-studio-yolo:${{ matrix.arch }}-${{ github.ref_name }}
