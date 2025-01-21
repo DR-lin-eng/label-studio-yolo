@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 # 升级 pip 并安装依赖
 RUN python -m pip install --upgrade pip && \
     pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu && \
-    pip install --no-cache-dir ultralytics redis label-studio-ml
+    pip install --no-cache-dir ultralytics redis label-studio-ml rq
 
 # 创建模型目录并复制文件
 COPY model_service /app/model_service/
