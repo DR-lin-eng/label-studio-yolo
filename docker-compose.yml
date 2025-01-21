@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  ml-backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.${ARCH:-amd64}
+    environment:
+      - LABEL_STUDIO_URL=http://your-label-studio-ip:port
+      - LABEL_STUDIO_API_KEY=your-api-key
+    ports:
+      - "19090:9090"
+    volumes:
+      - /path/to/your/model:/root/model
