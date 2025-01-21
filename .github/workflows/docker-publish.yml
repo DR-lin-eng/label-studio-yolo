@@ -2,14 +2,11 @@ name: Docker Build and Push
 
 on:
   push:
-    tags:
-      - 'v*'  # 当推送 v 开头的标签时触发
-    branches:
-      - main  # 当推送到 main 分支时触发
+    tags: ['v*']
+    branches: ['main']
   pull_request:
-    branches:
-      - main  # 当对 main 分支发起 PR 时触发
-  workflow_dispatch:  # 允许手动触发
+    branches: ['main']
+  workflow_dispatch:
 
 jobs:
   docker:
@@ -20,6 +17,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          lfs: true  # 如果你用 Git LFS 存储模型文件
+
+      - name: Download model file  # 这步可以从你的存储下载模型
+        run: |
+          mkdir -p models
+          # 这里可以是从你的存储下载模型的命令
+          # 例如：wget, curl, aws s3 cp 等
+          # 或者直接把模型文件放在仓库中
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
