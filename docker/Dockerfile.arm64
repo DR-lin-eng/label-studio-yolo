@@ -1,27 +1,22 @@
 FROM --platform=linux/arm64 python:3.9-slim
 
+
 WORKDIR /app
 
-# 1. 安装系统依赖
+# 安装系统依赖
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
     libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
-# 2. 升级 pip
-RUN python -m pip install --upgrade pip
+# 升级 pip 并安装依赖
+RUN python -m pip install --upgrade pip && \
+    pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir ultralytics redis label-studio-ml
 
-# 3. 分步安装 Python 依赖，每个包单独安装以便于调试
-RUN pip install --no-cache-dir torch torchvision --index-url https://download.pytorch.org/whl/cpu
-RUN pip install --no-cache-dir ultralytics
-RUN pip install --no-cache-dir redis
-RUN pip install --no-cache-dir label-studio-ml
+# 创建模型目录并复制文件
+COPY model_service /app/model_service/
+COPY models /root/model/
 
-# 4. 复制项目文件
-COPY model_service /app/model_service
-
-# 5. 初始化服务
-RUN python -m label_studio_ml.server init model_service
-
-# 6. 启动命令
-CMD [ "python", "-m", "label_studio_ml.server", "start", "model_service", "--port", "9090", "--host", "0.0.0.0" ]
+# 启动服务（移除初始化步骤）
+CMD [ "python", "-m", "label_studio_ml.server", "start", "/app/model_service", "--port", "9090", "--host", "0.0.0.0" ]
