@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir \
     ultralytics \
     label-studio-ml \
     redis
-    rq
+    
 
 # 复制项目文件
 COPY model_service /app/model_service
