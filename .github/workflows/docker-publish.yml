@@ -3,7 +3,13 @@ name: Docker Build and Push
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*'  # 当推送 v 开头的标签时触发
+    branches:
+      - main  # 当推送到 main 分支时触发
+  pull_request:
+    branches:
+      - main  # 当对 main 分支发起 PR 时触发
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
   docker:
@@ -12,7 +18,7 @@ jobs:
       matrix:
         arch: [amd64, arm64]
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up QEMU
@@ -35,5 +41,5 @@ jobs:
           platforms: linux/${{ matrix.arch }}
           push: true
           tags: |
-            line2188/label-studio-yolo:${{ matrix.arch }}-latest
-            line2188/label-studio-yolo:${{ matrix.arch }}-${{ github.ref_name }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/label-studio-yolo:${{ matrix.arch }}-latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/label-studio-yolo:${{ matrix.arch }}-${{ github.ref_name }}
